@@ -1,0 +1,11 @@
+# Project Rules
+
+1. **Import Paths**: 
+   - NEVER include version numbers in import paths (e.g., `@1.2.3`).
+   - ALWAYS use the standard package name as defined in `package.json`.
+   - ❌ Bad: `import { Button } from "@radix-ui/react-button@1.1.1"`
+   - ✅ Good: `import { Button } from "@radix-ui/react-button"`
+
+2. **Next.js & React**:
+   - Use strict TypeScript validation.
+   - Ensure all UI components match the existing project structure in `src/components/ui`.

@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { Menu, X } from "lucide-react";
 import { Button } from "./ui/button";
 import { motion, AnimatePresence } from "motion/react";
@@ -9,6 +10,8 @@ import { motion, AnimatePresence } from "motion/react";
 export function Header() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const pathname = usePathname();
+  const isOnSubPage = pathname !== "/";
 
   useEffect(() => {
     const handleScroll = () => {
@@ -75,23 +78,35 @@ export function Header() {
         {/* Logo */}
         <Link href="/" className={`flex items-center gap-2 font-bold text-2xl tracking-tighter cursor-pointer`} style={{ fontFamily: "Raleway, sans-serif" }}>
           <span style={{ color: "#2C94F5" }}>UNO</span>
-          <span className={isScrolled ? "text-black" : "text-white"}>MEDIA</span>
+          <span className={isScrolled || isOnSubPage ? "text-black" : "text-white"}>MEDIA</span>
         </Link>
 
         {/* Desktop Nav */}
         <nav className="hidden md:flex items-center gap-8">
-          {navLinks.map((link) => (
-            <Link
-              key={link.name}
-              href={link.href}
-              className={`text-[1.1rem] font-medium hover:text-primary transition-colors ${
-                isScrolled ? "text-gray-700" : "text-white/90"
-              }`}
-              style={{ fontFamily: "Poppins, sans-serif" }}
-            >
-              {link.name}
-            </Link>
-          ))}
+          {navLinks.map((link) => {
+            const isActive = pathname === link.href;
+            const textColor = isScrolled || isOnSubPage ? "text-gray-700" : "text-white/90";
+            
+            return (
+              <Link
+                key={link.name}
+                href={link.href}
+                className={`text-[1.1rem] font-medium relative ${textColor} transition-colors`}
+                style={{ fontFamily: "Poppins, sans-serif" }}
+              >
+                <span className="relative inline-block">
+                  {link.name}
+                  <motion.span
+                    className="absolute bottom-0 left-0 h-[3px] bg-white"
+                    initial={{ width: 0 }}
+                    whileHover={{ width: "100%" }}
+                    transition={{ duration: 0.3, ease: "easeInOut" }}
+                    style={{ display: isScrolled || isOnSubPage ? "none" : "block" }}
+                  />
+                </span>
+              </Link>
+            );
+          })}
           <Button
             variant={isScrolled ? "default" : "secondary"}
             className="ml-4"
@@ -108,7 +123,7 @@ export function Header() {
           {isMobileMenuOpen ? (
             <X className="text-white w-6 h-6 z-50" />
           ) : (
-            <Menu className={`w-6 h-6 ${isScrolled ? "text-black" : "text-white"}`} />
+            <Menu className={`w-6 h-6 ${isScrolled || isOnSubPage ? "text-black" : "text-white"}`} />
           )}
         </button>
       </div>
@@ -132,7 +147,13 @@ export function Header() {
                 >
                   <Link
                     href={link.href}
-                    onClick={() => setIsMobileMenuOpen(false)}
+                    onClick={() => {
+                      setIsMobileMenuOpen(false);
+                      // 모바일에서도 서브 페이지로 이동 시 색상 변경을 위해 약간의 딜레이
+                      setTimeout(() => {
+                        window.dispatchEvent(new Event('resize'));
+                      }, 100);
+                    }}
                     className="block"
                   >
                     <span 

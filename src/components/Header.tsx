@@ -67,13 +67,13 @@ export function Header() {
     <header
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
         isScrolled && !isMobileMenuOpen
-          ? "bg-white/90 backdrop-blur-md shadow-sm py-4 text-black"
-          : "bg-transparent py-6 text-white"
+          ? "bg-white/90 backdrop-blur-md shadow-sm py-4"
+          : "bg-transparent py-6"
       }`}
     >
       <div className="container mx-auto px-4 md:px-6 flex items-center justify-between relative z-50">
         {/* Logo */}
-        <Link href="/" className={`flex items-center gap-2 font-bold text-2xl tracking-tighter cursor-pointer ${isMobileMenuOpen ? "text-white" : ""}`}>
+        <Link href="/" className={`flex items-center gap-2 font-bold text-2xl tracking-tighter cursor-pointer ${isScrolled ? "text-black" : "text-white"}`}>
           <div className="w-8 h-8 rounded-full bg-primary flex items-center justify-center text-primary-foreground">
             U
           </div>
@@ -108,7 +108,7 @@ export function Header() {
           onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
         >
           {isMobileMenuOpen ? (
-            <X className="text-white w-6 h-6" />
+            <X className="text-white w-6 h-6 z-50" />
           ) : (
             <Menu className={`w-6 h-6 ${isScrolled ? "text-black" : "text-white"}`} />
           )}

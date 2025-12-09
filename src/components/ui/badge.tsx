@@ -1,7 +1,6 @@
 import * as React from "react";
-import * as React from "react";
-import { Slot } from "@radix-ui/react-slot"; // ??버전 ??��
-import { cva, type VariantProps } from "class-variance-authority"; // ??버전 ??��
+import { Slot } from "@radix-ui/react-slot"; // ??버전 ??��
+import { cva, type VariantProps } from "class-variance-authority"; // ??버전 ??��
 
 import { cn } from "./utils";
 

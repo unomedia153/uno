@@ -83,7 +83,7 @@ export function Header() {
     >
       <div className="container mx-auto px-4 md:px-6 flex items-center justify-between relative z-50">
         {/* Logo */}
-        <Link href="/" className={`flex items-center gap-2 font-bold text-2xl tracking-tighter cursor-pointer`} style={{ fontFamily: "Raleway, sans-serif" }}>
+        <Link href="/" className={`flex items-center gap-1 font-bold text-2xl tracking-tighter cursor-pointer`} style={{ fontFamily: "Raleway, sans-serif" }}>
           {/* UNO는 항상 파란색 */}
           <span style={{ color: "#2C94F5" }}>UNO</span>
           {/* MEDIA는 상황에 따라 색상 변경 */}

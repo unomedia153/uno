@@ -11,7 +11,12 @@ export function Header() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const pathname = usePathname();
+  
+  // 메인 페이지("/")가 아니면 서브 페이지로 간주
   const isOnSubPage = pathname !== "/";
+
+  // 텍스트가 검정색이어야 하는 상황: 스크롤이 되었거나 OR 서브 페이지일 때
+  const isDarkText = isScrolled || isOnSubPage;
 
   useEffect(() => {
     const handleScroll = () => {
@@ -71,37 +76,43 @@ export function Header() {
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
         isScrolled && !isMobileMenuOpen
           ? "bg-white/90 backdrop-blur-md shadow-sm py-4"
-          : "bg-transparent py-6"
+          : isOnSubPage 
+            ? "bg-white/90 backdrop-blur-md shadow-sm py-4" // 서브페이지면 배경 흰색
+            : "bg-transparent py-6" // 메인이고 스크롤 안했으면 투명
       }`}
     >
       <div className="container mx-auto px-4 md:px-6 flex items-center justify-between relative z-50">
         {/* Logo */}
         <Link href="/" className={`flex items-center gap-2 font-bold text-2xl tracking-tighter cursor-pointer`} style={{ fontFamily: "Raleway, sans-serif" }}>
+          {/* UNO는 항상 파란색 */}
           <span style={{ color: "#2C94F5" }}>UNO</span>
-          <span className={isScrolled || isOnSubPage ? "text-black" : "text-white"}>MEDIA</span>
+          {/* MEDIA는 상황에 따라 색상 변경 */}
+          <span className={isDarkText ? "text-black" : "text-white"}>MEDIA</span>
         </Link>
 
         {/* Desktop Nav */}
         <nav className="hidden md:flex items-center gap-8">
           {navLinks.map((link) => {
             const isActive = pathname === link.href;
-            const textColor = isScrolled || isOnSubPage ? "text-gray-700" : "text-white/90";
             
             return (
               <Link
                 key={link.name}
                 href={link.href}
-                className={`text-[1.1rem] font-medium relative ${textColor} transition-colors`}
+                // isDarkText가 true면 검정, 아니면 흰색. transition-colors로 부드럽게.
+                className={`text-[1.1rem] font-medium relative transition-colors ${
+                  isDarkText ? "text-black" : "text-white"
+                }`}
                 style={{ fontFamily: "Poppins, sans-serif" }}
               >
-                <span className="relative inline-block">
+                <span className="relative inline-block py-1">
                   {link.name}
+                  {/* 밑줄 애니메이션 */}
                   <motion.span
-                    className="absolute bottom-0 left-0 h-[3px] bg-white"
+                    className={`absolute bottom-0 left-0 h-[3px] ${isDarkText ? "bg-black" : "bg-white"}`}
                     initial={{ width: 0 }}
                     whileHover={{ width: "100%" }}
                     transition={{ duration: 0.3, ease: "easeInOut" }}
-                    style={{ display: isScrolled || isOnSubPage ? "none" : "block" }}
                   />
                 </span>
               </Link>
@@ -121,9 +132,11 @@ export function Header() {
           onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
         >
           {isMobileMenuOpen ? (
+            // 메뉴가 열렸을 때는 X 아이콘 (보통 오버레이 위라 흰색 유지)
             <X className="text-white w-6 h-6 z-50" />
           ) : (
-            <Menu className={`w-6 h-6 ${isScrolled || isOnSubPage ? "text-black" : "text-white"}`} />
+            // 메뉴가 닫혔을 때는 햄버거 아이콘 (배경색에 따라 색상 변경)
+            <Menu className={`w-6 h-6 ${isDarkText ? "text-black" : "text-white"}`} />
           )}
         </button>
       </div>
@@ -149,7 +162,7 @@ export function Header() {
                     href={link.href}
                     onClick={() => {
                       setIsMobileMenuOpen(false);
-                      // 모바일에서도 서브 페이지로 이동 시 색상 변경을 위해 약간의 딜레이
+                      // 페이지 이동 트리거
                       setTimeout(() => {
                         window.dispatchEvent(new Event('resize'));
                       }, 100);

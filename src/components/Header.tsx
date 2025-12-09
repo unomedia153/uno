@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
+import Link from "next/link";
 import { Menu, X } from "lucide-react";
 import { Button } from "./ui/button";
 import { motion, AnimatePresence } from "motion/react";
@@ -28,10 +29,10 @@ export function Header() {
   }, [isMobileMenuOpen]);
 
   const navLinks = [
-    { name: "About", href: "#about" },
-    { name: "Portfolio", href: "#portfolio" },
-    { name: "News", href: "#news" },
-    { name: "Contact us", href: "#contact" },
+    { name: "About", href: "/about" },
+    { name: "Portfolio", href: "/portfolio" },
+    { name: "News", href: "/news" },
+    { name: "Contact us", href: "/contact" },
   ];
 
   const menuVariants = {
@@ -72,17 +73,17 @@ export function Header() {
     >
       <div className="container mx-auto px-4 md:px-6 flex items-center justify-between relative z-50">
         {/* Logo */}
-        <div className={`flex items-center gap-2 font-bold text-2xl tracking-tighter cursor-pointer ${isMobileMenuOpen ? "text-white" : ""}`}>
+        <Link href="/" className={`flex items-center gap-2 font-bold text-2xl tracking-tighter cursor-pointer ${isMobileMenuOpen ? "text-white" : ""}`}>
           <div className="w-8 h-8 rounded-full bg-primary flex items-center justify-center text-primary-foreground">
             U
           </div>
           <span style={{ fontFamily: "Raleway, sans-serif" }}>UNOMEDIA</span>
-        </div>
+        </Link>
 
         {/* Desktop Nav */}
         <nav className="hidden md:flex items-center gap-8">
           {navLinks.map((link) => (
-            <a
+            <Link
               key={link.name}
               href={link.href}
               className={`text-[1.1rem] font-medium hover:text-primary transition-colors ${
@@ -91,7 +92,7 @@ export function Header() {
               style={{ fontFamily: "Poppins, sans-serif" }}
             >
               {link.name}
-            </a>
+            </Link>
           ))}
           <Button
             variant={isScrolled ? "default" : "secondary"}
@@ -126,20 +127,24 @@ export function Header() {
           >
             <div className="flex flex-col gap-2 items-end">
               {navLinks.map((link) => (
-                <motion.a
+                <motion.div
                   key={link.name}
-                  href={link.href}
                   variants={itemVariants}
                   className="group block py-2"
-                  onClick={() => setIsMobileMenuOpen(false)}
                 >
-                  <span 
-                    className="block text-[2rem] font-bold text-white group-hover:text-primary transition-colors"
-                    style={{ fontFamily: "Poppins, sans-serif" }}
+                  <Link
+                    href={link.href}
+                    onClick={() => setIsMobileMenuOpen(false)}
+                    className="block"
                   >
-                    {link.name}
-                  </span>
-                </motion.a>
+                    <span 
+                      className="block text-[2rem] font-bold text-white group-hover:text-primary transition-colors"
+                      style={{ fontFamily: "Poppins, sans-serif" }}
+                    >
+                      {link.name}
+                    </span>
+                  </Link>
+                </motion.div>
               ))}
               
               <motion.div variants={itemVariants} className="mt-12 space-y-2 text-gray-400 text-sm">
